@@ -1,0 +1,1 @@
+java -DLISTENING_PORT=8081 -jar ./java/target/forwarding-proxy-with-dblog-0.0.1-SNAPSHOT.jar
