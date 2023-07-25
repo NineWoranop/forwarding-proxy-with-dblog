@@ -1,0 +1,14 @@
+HTTP/1.1 404
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: x-requested-with, Content-Type, origin, authorization, accept, client-security-token, correlationid, Access-Control-Allow-Credentials
+Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT
+Access-Control-Allow-Origin: http://localhost:4200
+Access-Control-Expose-Headers: Content-Security-Policy, Location
+Access-Control-Max-Age: 600
+Date: Sun, 21 May 2023 00:00:00 GMT
+Transfer-Encoding: chunked
+Content-Type: application/json
+Transfer-Encoding: chunked
+Content-Length: 121
+
+{"timestamp":"2023-01-01T00:00:00.000+0000","status":404,"error":"Not Found","message":"No message available","path":"/"}

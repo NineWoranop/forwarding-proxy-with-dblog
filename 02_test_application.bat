@@ -1,0 +1,1 @@
+cd java & mvn test & cd ..

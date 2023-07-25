@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  sonarque:
+    build: sonarque/.
+    ports:
+      - 9001:9000
+  mysql57:
+    build: mysql57/.
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=forwarding-proxy
+      - MYSQL_USER=proxy
+      - MYSQL_PASSWORD=proxy
+      - MYSQL_LOWER_CASE_TABLE_NAMES=1
+    volumes:
+      - ./mount/mysql_data:/var/lib/mysql:rw
+    restart: "no"

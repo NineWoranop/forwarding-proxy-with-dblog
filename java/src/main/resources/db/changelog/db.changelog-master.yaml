@@ -1,0 +1,3 @@
+databaseChangeLog:
+- include:
+    file: db/sql/001-schema.sql
