@@ -20,13 +20,14 @@ import org.apache.hc.client5.http.io.HttpClientConnectionManager;
 import org.apache.hc.client5.http.protocol.HttpClientContext;
 import org.apache.hc.client5.http.socket.ConnectionSocketFactory;
 import org.apache.hc.client5.http.socket.PlainConnectionSocketFactory;
+import org.apache.hc.client5.http.ssl.NoopHostnameVerifier;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactory;
 import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
 import org.apache.hc.client5.http.ssl.TrustAllStrategy;
 import org.apache.hc.core5.http.config.Registry;
 import org.apache.hc.core5.http.config.RegistryBuilder;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
-import org.apache.hc.core5.ssl.SSLContexts;
+import org.apache.hc.core5.ssl.SSLContextBuilder;
 import org.forwardingproxy.Constants;
 import org.forwardingproxy.config.model.Proxy;
 import org.forwardingproxy.config.model.ServerConfig;
@@ -80,7 +81,7 @@ public class HttpForwarder {
 			if(connectionManager == null) {
 				httpClientBuilder.setConnectionManager(getConnectionManager(sslContext));
 			}
-
+			
 			try (CloseableHttpClient httpclient = httpClientBuilder.setDefaultRequestConfig(serverConfig.buildRequestConfig()).build();) {
 				startProcessTime = LocalDateTime.now();
 				if (httpClientContext != null) {
@@ -111,13 +112,21 @@ public class HttpForwarder {
 		return result;
 	}
 
-	private SSLContext acceptAllSSLCertificates() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		SSLContext result = SSLContexts.custom().loadTrustMaterial(null, new TrustAllStrategy()).build();
+	private SSLContext acceptAllSSLCertificates()
+			throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+		SSLContext result = SSLContextBuilder.create().loadTrustMaterial(TrustAllStrategy.INSTANCE).build();
+		return result;
+	}
+
+	private SSLConnectionSocketFactory getSSLConnectionSocketFactory(SSLContext sslContext) {
+		SSLConnectionSocketFactory result = SSLConnectionSocketFactoryBuilder.create()
+				.setSslContext(sslContext)
+				.setHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
 		return result;
 	}
 
 	private HttpClientConnectionManager getConnectionManager(SSLContext sslContext) {
-		final SSLConnectionSocketFactory sslSocketFactory = SSLConnectionSocketFactoryBuilder.create().setSslContext(sslContext).build();
+		final SSLConnectionSocketFactory sslSocketFactory = getSSLConnectionSocketFactory(sslContext);
 		final Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
 				.register(Constants.HTTP, PlainConnectionSocketFactory.INSTANCE)
 				.register(Constants.HTTPS, sslSocketFactory)
