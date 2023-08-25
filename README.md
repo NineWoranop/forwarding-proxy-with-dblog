@@ -21,5 +21,10 @@ Note!!! Make sure you installed docker in your machine.
 
 ## Start Spring Boot Application from docker image
 
+Docker image have been builded and published on docker hub on this [link](https://hub.docker.com/r/ninetom/forwarding-proxy).
+You could pull docker image with command.
 
+docker pull ninetom/forwarding-proxy
+
+This is a snapshot from logs in database.
 ![Example logs on database (Mysql)](dblog.png)
