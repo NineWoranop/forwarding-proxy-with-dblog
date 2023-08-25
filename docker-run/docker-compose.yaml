@@ -1,12 +1,8 @@
 version: '3.3'
 
 services:
-  sonarque:
-    build: sonarque/.
-    ports:
-      - 9001:9000
-  mysql57:
-    build: mysql57/.
+  mysql:
+    build: mysql/.
     ports:
       - 3306:3306
     environment:
@@ -19,3 +15,18 @@ services:
     volumes:
       - ./mount/mysql_data:/var/lib/mysql:rw
     restart: "no"
+  forwarding-proxy:
+    image: ninetom/forwarding-proxy
+    depends_on:
+      - mysql
+    ports:
+      - 8081:8081
+      - 8082:8082
+    volumes:
+      - ./mount/proxy_data:/proxy:rw
+    environment:
+      - SPRING_CONFIG_NAME=application
+      - SPRING_CONFIG_LOCATION=file:///proxy/
+    command:
+      - -jar
+      - app.jar

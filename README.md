@@ -15,4 +15,11 @@ Note!!! Don't forget to start docker for SonarQue. Please see docker files in do
 ## Start Spring Boot Application by jar file
 04_run_backendservice.bat
 
+## Build docker image
+05_build_docker_image.bat
+Note!!! Make sure you installed docker in your machine.
+
+## Start Spring Boot Application from docker image
+
+
 ![Example logs on database (Mysql)](dblog.png)
